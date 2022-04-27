@@ -8,4 +8,7 @@ const userSchema = mongoose.Schema({
 
 userSchema.plugin(uniqueValidator);
 
+// Calls the model constructor on the Mongoose instance and
+// passes it the name of the collection
+// and a reference to the schema definition.
 module.exports = mongoose.model('User', userSchema);

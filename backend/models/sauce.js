@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// QUESTION: do I need to use 'new' mongoose.Schema?
 const sauceSchema = mongoose.Schema({
     userId: {type: String},
     name: {type: String, required: true},

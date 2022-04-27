@@ -5,18 +5,19 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 const path = require('path');
+require('./initDB');
 
 const app = express();
 
 // Connection to MongoDB Atlas database
-mongoose.connect('mongodb+srv://Edna:Am%40zing@cluster0.uhlwi.mongodb.net/DDatabase?retryWrites=true&w=majority')
-    .then(() => {
-        console.log('Successfully connected to MongoDB Atlas!');
-    })
-    .catch((error) => {
-        console.log('Unable to connect to MongoDB Atlas!');
-        console.error(error);
-});
+// mongoose.connect('mongodb+srv://AdminP6:0K9RfXhHPup96aos@clusterp6.uhlwi.mongodb.net/ClusterP6?retryWrites=true&w=majority')
+//     .then(() => {
+//         console.log('Successfully connected to MongoDB Atlas!');
+//     })
+//     .catch((error) => {
+//         console.log('Unable to connect to MongoDB Atlas!');
+//         console.error(error);
+// });
 
 // Adds headers to the response object to avoid CORS errors
 // This will allow requests from all origins to access your API. 
