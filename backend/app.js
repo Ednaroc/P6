@@ -1,5 +1,3 @@
-//QUESTION: I can't see the main pepper ingredient in the sauce page...
-
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');

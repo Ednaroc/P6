@@ -1,5 +1,3 @@
-// QUESTION: how can I use https?
-
 const http = require('http');
 const app = require('./app');
 

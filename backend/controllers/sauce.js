@@ -63,7 +63,7 @@ exports.modifySauce = (req, res, next) => {
             .then((promiseReturn) => {
                 const filename = promiseReturn.imageUrl.split('/images/')[1];
                 fs.unlink('images/' + filename, (result) => {
-                    console.log(result);
+                    console.log(result); //QUESTION: could we skip that?
                 });
                 res.status(201).json({message: 'Sauce updated successfully!'});
             })
