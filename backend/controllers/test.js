@@ -40,6 +40,16 @@ Sauce.findOne({_id: req.params.id}).then(
             .then(() => {res.status(201).json({message: 'Sauce like status updated successfully!'});})
             .catch((error) => {res.status(400).json({error: error});});
 
+            
+            const status = req.body.like;
+            const userId = req.body.userId;
+            if ((status == 0 || status == -1) && sauce.usersLiked.includes(userId)) {
+                Sauce.updateOne(
+                    {_id: req.params.id},
+                    {$inc: {likes: -1}},
+                    {$filter: {input: usersLiked, as: 'el', cond: el != userId}}
+                );
+            }
 
 
             Sauce.updateOne(

@@ -7,6 +7,8 @@ const sauceRoutes = require('./routes/sauce');
 const path = require('path');
 require('./initDB');
 
+const newErrorHandler = require('./middleware/errorHandler');
+
 const app = express();
 
 // Connection to MongoDB Atlas database
@@ -38,5 +40,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Set the endpoint and then the router to be used
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
+
+app.use(newErrorHandler);
 
 module.exports = app;

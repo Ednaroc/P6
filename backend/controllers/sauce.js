@@ -1,6 +1,5 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
-const sauce = require('../models/sauce');
 
 // ROUTE 1: Returns all sauces from the database
 exports.getAllSauces = (req, res, next) => {
@@ -57,24 +56,16 @@ exports.modifySauce = (req, res, next) => {
             imageUrl: url + '/images/' + req.file.filename,
             heat: req.body.sauce.heat,
         };
-        // Sauce.findOne({_id: req.params.id}).then(
-        //     (sauceTemp) => {
-        //         const filename = sauceTemp.imageUrl.split('/images/')[1];
-        //         fs.unlink('images/' + filename, () => {
-        //             Sauce.updateOne({_id: req.params.id}, sauce)
-        //                 .then(() => {res.status(201).json({message: 'Sauce updated successfully!'});})
-        //                 .catch((error) => {res.status(400).json({error: error});});
-        //         });
-        //     }
-        // );
         Sauce.findOneAndUpdate(
             {_id: req.params.id}, sauce,
             {projection: {'imageUrl': 1}}
         )
-            .then(() => {
+            .then((promiseReturn) => {
+                const filename = promiseReturn.imageUrl.split('/images/')[1];
+                fs.unlink('images/' + filename, (result) => {
+                    console.log(result);
+                });
                 res.status(201).json({message: 'Sauce updated successfully!'});
-                const filename = res.body.sauce.imageUrl.split('/images/')[1];
-                // fs.unlink('images/' + filename);
             })
             .catch((error) => {res.status(400).json({error: error});});      
     } else {
@@ -92,14 +83,12 @@ exports.modifySauce = (req, res, next) => {
             .then(() => {res.status(201).json({message: 'Sauce updated successfully!'});})
             .catch((error) => {res.status(400).json({error: error});});
     }
-    // Sauce.updateOne({_id: req.params.id}, sauce)
-    //     .then(() => {res.status(201).json({message: 'Sauce updated successfully!'});})
-    //     .catch((error) => {res.status(400).json({error: error});});
 };
 
 // ROUTE 5: Deletes the sauce with the provided _id
 exports.deleteSauce = (req, res, next) => {
-    Sauce.findOne({_id: req.params.id}).then(
+    Sauce.findOne({_id: req.params.id})
+    .then(
         (sauce) => {
             if (!sauce) {
                 return res.status(404).json({error: new Error('No such thing!')});
@@ -108,7 +97,7 @@ exports.deleteSauce = (req, res, next) => {
                 return res.status(401).json({error: new Error('Unauthorized request!')});
             }
             const filename = sauce.imageUrl.split('/images/')[1];
-            // To delete the file
+            // To delete the associated image file
             fs.unlink('images/' + filename, () => {
                // Deleting once we know it exists and it belongs to the user
                 Sauce.deleteOne({_id: req.params.id})
@@ -116,8 +105,8 @@ exports.deleteSauce = (req, res, next) => {
                     .catch((error) => {res.status(400).json({error: error});});
             });
         }
-    );
-    //QUESTION: should I add a findOne catch block?
+    )
+    .catch((error) => {res.status(400).json({error: error});});
 };
 
 // ROUTE 6: Updates the sauce (dis)like with the provided _id
