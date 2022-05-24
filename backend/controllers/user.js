@@ -13,13 +13,12 @@ exports.signup = (req, res, next) => {
             });
             user.save()
                 .then(() => {res.status(201).json({message: 'User added successfully!'});})
-                .catch((error) => {res.status(500).json({error: error});});
+                .catch((error) => {next(error);});
         }
     );
 };
 
 
-// QUESTION: How do I see these error messages?
 // Checks user credentials (if user exist and if correct password)
 // Returns user _id and JSON web token
 exports.login = (req, res, next) => {
@@ -42,7 +41,7 @@ exports.login = (req, res, next) => {
                         token: token
                     });
                 }
-            ).catch((error) => {res.status(500).json({error: error});});
+            ).catch((error) => {next(error);});
         }
-    ).catch((error) => {res.status(500).json({error: error});});
+    ).catch((error) => {next(error);});
 };

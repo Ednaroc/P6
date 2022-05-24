@@ -9,16 +9,6 @@ const newErrorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Connection to MongoDB Atlas database
-// mongoose.connect('mongodb+srv://AdminP6:0K9RfXhHPup96aos@clusterp6.uhlwi.mongodb.net/ClusterP6?retryWrites=true&w=majority')
-//     .then(() => {
-//         console.log('Successfully connected to MongoDB Atlas!');
-//     })
-//     .catch((error) => {
-//         console.log('Unable to connect to MongoDB Atlas!');
-//         console.error(error);
-// });
-
 // Adds headers to the response object to avoid CORS errors
 // This will allow requests from all origins to access your API. 
 app.use((req, res, next) => {

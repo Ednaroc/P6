@@ -5,17 +5,16 @@ const fs = require('fs');
 exports.getAllSauces = (req, res, next) => {
     Sauce.find()
         .then((sauces) => {res.status(200).json(sauces);})
-        .catch((error) => {res.status(400).json({error: error});});
+        .catch((error) => {next(error);});
 };
 
 // ROUTE 2: Returns the sauce with the provided _id
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({_id: req.params.id})
         .then((sauce) => {res.status(200).json(sauce);})
-        .catch((error) => {res.status(404).json({error: error});});
+        .catch((error) => {next(error);});
 };
 
-//QUESTION: TODO weird image file name, url scheme
 // ROUTE 3: Creates a new sauce in the database
 exports.createSauce = (req, res, next) => {
     req.body.sauce = JSON.parse(req.body.sauce);
@@ -35,19 +34,16 @@ exports.createSauce = (req, res, next) => {
     });
     sauce.save()
         .then(() => {res.status(201).json({message: 'Sauce saved successfully.'});})
-        .catch((error) => {res.status(400).json({error: error});});
+        .catch((error) => {next(error);});
 };
 
 // ROUTE 4: Updates the sauce with the provided _id
 exports.modifySauce = (req, res, next) => {
     let sauce = new Sauce({_id: req.params.id});
-    //QUESTION: how do we know the req.params??
-    //let sauce = new Sauce({_id: req.params._id});
     if (req.file) {
         req.body.sauce = JSON.parse(req.body.sauce);
         const url = req.protocol + '://' + req.get('host');
         sauce = {
-            //_id: req.params.id,
             userId: req.body.sauce.userId,
             name: req.body.sauce.name,
             manufacturer: req.body.sauce.manufacturer,
@@ -66,10 +62,9 @@ exports.modifySauce = (req, res, next) => {
                     res.status(201).json({message: 'Sauce updated successfully!'});
                 });
             })
-            .catch((error) => {res.status(400).json({error: error});});      
+            .catch((error) => {next(error);});      
     } else {
         sauce = {
-           // _id: req.params.id, //QUESTION: is this necessary?
             userId: req.body.userId,
             name: req.body.name,
             manufacturer: req.body.manufacturer,
@@ -80,7 +75,7 @@ exports.modifySauce = (req, res, next) => {
         };
         Sauce.updateOne({_id: req.params.id}, sauce)
             .then(() => {res.status(201).json({message: 'Sauce updated successfully!'});})
-            .catch((error) => {res.status(400).json({error: error});});
+            .catch((error) => {next(error);});
     }
 };
 
@@ -101,11 +96,11 @@ exports.deleteSauce = (req, res, next) => {
                // Deleting once we know it exists and it belongs to the user
                 Sauce.deleteOne({_id: req.params.id})
                     .then(() => {res.status(200).json({message: 'Deleted!'});})
-                    .catch((error) => {res.status(400).json({error: error});});
+                    .catch((error) => {next(error);});
             });
         }
     )
-    .catch((error) => {res.status(400).json({error: error});});
+    .catch((error) => {next(error);});
 };
 
 // ROUTE 6: Updates the sauce (dis)like with the provided _id
@@ -153,10 +148,7 @@ exports.likeSauce = (req, res, next) => {
             sauceLike = sauce;
             Sauce.updateOne({_id: req.params.id}, sauceLike)
                 .then(() => {res.status(201).json({message: 'Sauce like status updated successfully!'});})
-                .catch((error) => {res.status(400).json({error: error});});
+                .catch((error) => {next(error);});
         }
-    ).catch(
-        (error) => {res.status(400).json({error: error});}
-    );
-
+    ).catch((error) => {next(error);});
 };
