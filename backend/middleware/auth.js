@@ -13,11 +13,11 @@ module.exports = (req, res, next) => {
         // req.auth = { userId: userId}
         req.auth = {userId};
         if (req.body.userId && req.body.userId !== userId) {
-            throw 'Invalid user ID';
+            next({'message': 'Invalid user ID'});
         } else {
             next();
         }
     } catch {
-        res.status(401).json({error: new Error('Invalid request!')});
+        next({'message': 'Invalid request!'});
     }
 };

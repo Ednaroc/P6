@@ -85,10 +85,10 @@ exports.deleteSauce = (req, res, next) => {
     .then(
         (sauce) => {
             if (!sauce) {
-                return res.status(404).json({error: new Error('No such thing!')});
+                next({'message': 'No such thing!'});
             }
             if (sauce.userId !== req.auth.userId) {
-                return res.status(401).json({error: new Error('Unauthorized request!')});
+                next({'message': 'Unauthorized request!'});
             }
             const filename = sauce.imageUrl.split('/images/')[1];
             // To delete the associated image file
